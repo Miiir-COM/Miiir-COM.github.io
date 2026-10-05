@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Omni File Browser Documentation — Miya</title>
+  <title>Omni File Browser Documentation — Miir</title>
   <meta name="description" content="Documentation for Omni File Browser: quick start, options, themes, platform notes and extending.">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/style.css">
@@ -11,7 +11,7 @@
 <body>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="../"><img src="../assets/logo.svg" alt=""> Miya</a>
+      <a class="brand" href="../"><img src="../assets/logo.svg" alt=""> Miir</a>
       <nav class="nav">
         <a href="../"><span class="l-en">Home</span><span class="l-ko">홈</span></a>
         <a href="./"><span class="l-en">Assets</span><span class="l-ko">에셋</span></a>
@@ -57,7 +57,7 @@
       </p>
 
       <h2 id="quick-start"><span class="l-en">Quick start</span><span class="l-ko">빠른 시작</span></h2>
-<pre><code><span class="k">using</span> Miya.OmniFileBrowser;
+<pre><code><span class="k">using</span> Miir.OmniFileBrowser;
 
 <span class="c">// Load</span>
 FileBrowser.ShowLoadDialog(result =&gt;
@@ -146,7 +146,7 @@ FileBrowserBookmarks.MaxRecent = <span class="s">10</span>;</code></pre>
         <li><span class="l-en">The user grants a folder once via the system folder picker ("Add folder…" in the sidebar). The grant survives restarts.</span><span class="l-ko">사용자가 시스템 폴더 선택기로 폴더를 한 번 허용합니다(사이드바의 "폴더 추가…"). 허용은 앱을 다시 시작해도 유지됩니다.</span></li>
         <li><span class="l-en">Android 11+ can't grant the root of internal storage or the Download folder itself; pick a sub-folder.</span><span class="l-ko">Android 11 이상은 내부 저장소 최상위나 Download 폴더 자체를 허용할 수 없습니다. 하위 폴더를 선택하세요.</span></li>
         <li><span class="l-en">"App Storage" (<code>Application.persistentDataPath</code>) is always available.</span><span class="l-ko">"앱 저장소"(<code>Application.persistentDataPath</code>)는 항상 사용할 수 있습니다.</span></li>
-        <li><span class="l-en">With minify (R8/ProGuard) enabled, add <code>-keep class com.miya.omnifilebrowser.** { *; }</code> to <code>proguard-user.txt</code>.</span><span class="l-ko">minify(R8/ProGuard)를 켰다면 <code>proguard-user.txt</code>에 <code>-keep class com.miya.omnifilebrowser.** { *; }</code>를 추가하세요.</span></li>
+        <li><span class="l-en">With minify (R8/ProGuard) enabled, add <code>-keep class com.Miir.omnifilebrowser.** { *; }</code> to <code>proguard-user.txt</code>.</span><span class="l-ko">minify(R8/ProGuard)를 켰다면 <code>proguard-user.txt</code>에 <code>-keep class com.Miir.omnifilebrowser.** { *; }</code>를 추가하세요.</span></li>
       </ul>
       <h3>iOS</h3>
       <ul>
@@ -175,7 +175,7 @@ FileBrowserBookmarks.MaxRecent = <span class="s">10</span>;</code></pre>
 
   <footer class="site-footer">
     <div class="wrap">
-      <span>© <span id="year">2026</span> Miya</span>
+      <span>© <span id="year">2026</span> Miir</span>
       <span><a href="../contact.html">leehongju1991@gmail.com</a></span>
     </div>
   </footer>

@@ -1,6 +1,6 @@
 // Language switch (English / 한국어). Remembers the choice per browser.
 (function () {
-  var KEY = "miya-lang";
+  var KEY = "miiir-lang";
   var root = document.documentElement;
 
   function saved() {

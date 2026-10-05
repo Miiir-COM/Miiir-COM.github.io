@@ -147,7 +147,7 @@ FileBrowser.Events.Opened += () =&gt; PauseGame();   <span class="c">// also Clo
         <li><span class="l-en">The user grants a folder once via the system folder picker ("Add folder…" in the sidebar). The grant survives restarts.</span><span class="l-ko">사용자가 시스템 폴더 선택기로 폴더를 한 번 허용합니다(사이드바의 "폴더 추가…"). 허용은 앱을 다시 시작해도 유지됩니다.</span></li>
         <li><span class="l-en">Android 11+ can't grant the root of internal storage or the Download folder itself; pick a sub-folder.</span><span class="l-ko">Android 11 이상은 내부 저장소 최상위나 Download 폴더 자체를 허용할 수 없습니다. 하위 폴더를 선택하세요.</span></li>
         <li><span class="l-en">"App Storage" (<code>Application.persistentDataPath</code>) is always available.</span><span class="l-ko">"앱 저장소"(<code>Application.persistentDataPath</code>)는 항상 사용할 수 있습니다.</span></li>
-        <li><span class="l-en">With minify (R8/ProGuard) enabled, add <code>-keep class com.Miiir.omnifilebrowser.** { *; }</code> to <code>proguard-user.txt</code>.</span><span class="l-ko">minify(R8/ProGuard)를 켰다면 <code>proguard-user.txt</code>에 <code>-keep class com.Miiir.omnifilebrowser.** { *; }</code>를 추가하세요.</span></li>
+        <li><span class="l-en">With minify (R8/ProGuard) enabled, add <code>-keep class com.miiir.omnifilebrowser.** { *; }</code> to <code>proguard-user.txt</code>.</span><span class="l-ko">minify(R8/ProGuard)를 켰다면 <code>proguard-user.txt</code>에 <code>-keep class com.miiir.omnifilebrowser.** { *; }</code>를 추가하세요.</span></li>
       </ul>
       <h3>iOS</h3>
       <ul>

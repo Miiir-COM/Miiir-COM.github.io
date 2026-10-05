@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Omni File Browser Documentation — Miya</title>
+  <meta name="description" content="Documentation for Omni File Browser: quick start, options, themes, platform notes and extending.">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../"><img src="../assets/logo.svg" alt=""> Miya</a>
+      <nav class="nav">
+        <a href="../"><span class="l-en">Home</span><span class="l-ko">홈</span></a>
+        <a href="./"><span class="l-en">Assets</span><span class="l-ko">에셋</span></a>
+        <a href="docs.html" aria-current="page"><span class="l-en">Docs</span><span class="l-ko">문서</span></a>
+        <a href="../contact.html"><span class="l-en">Contact</span><span class="l-ko">문의</span></a>
+      </nav>
+      <button class="lang-toggle" type="button">한국어</button>
+    </div>
+  </header>
+
+  <main class="wrap docs">
+    <nav aria-label="Contents">
+      <a href="#install"><span class="l-en">Installation</span><span class="l-ko">설치</span></a>
+      <a href="#demo"><span class="l-en">Demo scene</span><span class="l-ko">데모 씬</span></a>
+      <a href="#quick-start"><span class="l-en">Quick start</span><span class="l-ko">빠른 시작</span></a>
+      <a href="#ids"><span class="l-en">Paths vs. ids</span><span class="l-ko">경로와 Id</span></a>
+      <a href="#options"><span class="l-en">Options</span><span class="l-ko">옵션</span></a>
+      <a href="#global"><span class="l-en">Global settings</span><span class="l-ko">전역 설정</span></a>
+      <a href="#themes"><span class="l-en">Custom themes</span><span class="l-ko">커스텀 테마</span></a>
+      <a href="#platforms"><span class="l-en">Platform notes</span><span class="l-ko">플랫폼별 참고</span></a>
+      <a href="#extending"><span class="l-en">Extending</span><span class="l-ko">확장</span></a>
+      <a href="#support"><span class="l-en">Support</span><span class="l-ko">지원</span></a>
+    </nav>
+
+    <article>
+      <h1>Omni File Browser</h1>
+      <p class="sub">
+        <span class="l-en">Load / Save / Select Folder dialogs for Unity with one API on Windows, macOS, Linux, iOS and Android. Requires Unity 2022.3 or newer.</span>
+        <span class="l-ko">Windows, macOS, Linux, iOS, Android에서 하나의 API로 동작하는 Unity용 불러오기 / 저장 / 폴더 선택 다이얼로그. Unity 2022.3 이상이 필요합니다.</span>
+      </p>
+
+      <h2 id="install"><span class="l-en">Installation</span><span class="l-ko">설치</span></h2>
+      <ol>
+        <li><span class="l-en">Import the package from the Asset Store (Package Manager → My Assets).</span><span class="l-ko">에셋스토어에서 패키지를 Import 합니다 (Package Manager → My Assets).</span></li>
+        <li><span class="l-en">Everything lives in <code>Assets/OmniFileBrowser</code>. No setup or extra packages are required.</span><span class="l-ko">모든 파일은 <code>Assets/OmniFileBrowser</code> 안에 있습니다. 별도 설정이나 추가 패키지가 필요 없습니다.</span></li>
+        <li><span class="l-en">If your project uses <strong>only</strong> the new Input System on Unity 2022, make sure the scene has an <code>EventSystem</code> with <code>InputSystemUIInputModule</code>.</span><span class="l-ko">Unity 2022에서 새 Input System<strong>만</strong> 사용한다면 씬에 <code>InputSystemUIInputModule</code>이 있는 <code>EventSystem</code>이 있어야 합니다.</span></li>
+      </ol>
+
+      <h2 id="demo"><span class="l-en">Demo scene</span><span class="l-ko">데모 씬</span></h2>
+      <p>
+        <span class="l-en">Open <code>OmniFileBrowser/Demo/OmniFileBrowserDemo.unity</code> (or <strong>Tools → Omni File Browser → Open Demo Scene</strong>) and press Play. To try it on a phone, add the scene to your build. The <code>Demo</code> folder can be deleted at any time.</span>
+        <span class="l-ko"><code>OmniFileBrowser/Demo/OmniFileBrowserDemo.unity</code>를 열고(또는 <strong>Tools → Omni File Browser → Open Demo Scene</strong>) Play를 누르세요. 휴대폰에서 테스트하려면 이 씬을 빌드에 추가하세요. <code>Demo</code> 폴더는 언제든 삭제해도 됩니다.</span>
+      </p>
+
+      <h2 id="quick-start"><span class="l-en">Quick start</span><span class="l-ko">빠른 시작</span></h2>
+<pre><code><span class="k">using</span> Miya.OmniFileBrowser;
+
+<span class="c">// Load</span>
+FileBrowser.ShowLoadDialog(result =&gt;
+{
+    <span class="k">string</span> text = result.File.ReadAllText(); <span class="c">// paths AND Android content:// uris</span>
+    Debug.Log(result.File.Id);               <span class="c">// store to reopen later</span>
+});
+
+<span class="c">// Save in one step (dialog + write)</span>
+<span class="k">var</span> options = <span class="k">new</span> FileBrowserOptions { DefaultFileName = <span class="s">"save.json"</span> }.WithFilter(<span class="s">"JSON"</span>, <span class="s">"json"</span>);
+FileBrowser.SaveTextFile(json, result =&gt; Debug.Log(<span class="s">"Saved to "</span> + result.Id), <span class="k">null</span>, options);
+
+<span class="c">// "Save As": pick a location, write yourself</span>
+FileBrowser.ShowSaveDialog(result =&gt; result.File.WriteAllBytes(bytes), <span class="k">null</span>, options);
+
+<span class="c">// "Save": overwrite the file chosen earlier, no dialog</span>
+FileBrowserIO.WriteAllBytes(savedId, bytes);
+
+<span class="c">// Folder</span>
+FileBrowser.ShowFolderDialog(result =&gt; Debug.Log(result.File.Id));
+
+<span class="c">// async / await (null = cancelled)</span>
+<span class="k">var</span> r = <span class="k">await</span> FileBrowser.LoadAsync(<span class="k">new</span> FileBrowserOptions { AllowMultiSelect = <span class="k">true</span> });</code></pre>
+
+      <h2 id="ids"><span class="l-en">Paths vs. ids</span><span class="l-ko">경로와 Id</span></h2>
+      <p>
+        <span class="l-en"><code>PickedFile.Id</code> is a file path on desktop/iOS and a <code>content://</code> uri on Android. Always read and write through <code>PickedFile</code> or <code>FileBrowserIO</code> so both cases work.</span>
+        <span class="l-ko"><code>PickedFile.Id</code>는 데스크톱/iOS에서는 파일 경로, Android에서는 <code>content://</code> uri입니다. 두 경우 모두 동작하도록 읽기·쓰기는 항상 <code>PickedFile</code> 또는 <code>FileBrowserIO</code>를 통해 하세요.</span>
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th><span class="l-en">Member</span><span class="l-ko">멤버</span></th><th><span class="l-en">Meaning</span><span class="l-ko">의미</span></th></tr></thead>
+          <tbody>
+            <tr><td><code>Id</code></td><td><span class="l-en">Path or content uri. Persist it to reopen or overwrite later.</span><span class="l-ko">경로 또는 content uri. 저장해 두면 나중에 다시 열거나 덮어쓸 수 있습니다.</span></td></tr>
+            <tr><td><code>Path</code></td><td><span class="l-en">Real file system path, or <code>null</code> for Android content uris.</span><span class="l-ko">실제 파일 경로. Android content uri인 경우 <code>null</code>.</span></td></tr>
+            <tr><td><code>GetLocalPath()</code></td><td><span class="l-en">Always returns a path (copies a content uri into the cache first).</span><span class="l-ko">항상 경로를 반환합니다(content uri는 먼저 캐시에 복사).</span></td></tr>
+            <tr><td><code>ReadAllBytes / ReadAllText / WriteAllBytes / WriteAllText</code></td><td><span class="l-en">Sync IO for any id.</span><span class="l-ko">모든 Id에 쓸 수 있는 동기 IO.</span></td></tr>
+            <tr><td><code>ReadAllBytesAsync / WriteAllBytesAsync</code></td><td><span class="l-en">Async IO.</span><span class="l-ko">비동기 IO.</span></td></tr>
+            <tr><td><code>CopyTo(path) / CopyFrom(path)</code></td><td><span class="l-en">Streamed copies for large files.</span><span class="l-ko">큰 파일용 스트림 복사.</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="options"><span class="l-en">Options</span><span class="l-ko">옵션</span></h2>
+<pre><code><span class="k">new</span> FileBrowserOptions
+{
+    Title = <span class="s">"Export level"</span>,
+    Mode = BrowserMode.Custom,          <span class="c">// or BrowserMode.Native</span>
+    Filters = { <span class="k">new</span> FileFilter(<span class="s">"Level"</span>, <span class="s">"lvl"</span>), <span class="k">new</span> FileFilter(<span class="s">"JSON"</span>, <span class="s">"json"</span>) },
+    AddAllFilesFilter = <span class="k">true</span>,
+    AllowMultiSelect = <span class="k">false</span>,           <span class="c">// Load only</span>
+    DefaultFileName = <span class="s">"level01"</span>,        <span class="c">// Save: filter extension is appended</span>
+    InitialFolder = <span class="k">null</span>,               <span class="c">// path or content uri; null = last folder for DialogKey</span>
+    DialogKey = <span class="s">"levels"</span>,               <span class="c">// remembers the last folder per key</span>
+    ConfirmOverwrite = <span class="k">true</span>,
+    AllowCreateFolder = <span class="k">true</span>, AllowRename = <span class="k">true</span>, AllowDelete = <span class="k">false</span>,
+    ShowHiddenFiles = <span class="k">false</span>,
+    Theme = <span class="k">null</span>,                       <span class="c">// per-dialog theme</span>
+    TouchMode = <span class="k">null</span>,                   <span class="c">// force touch / pointer layout</span>
+    AndroidAutoRequestFolderAccess = <span class="k">false</span>,
+};</code></pre>
+
+      <h2 id="global"><span class="l-en">Global settings</span><span class="l-ko">전역 설정</span></h2>
+<pre><code>FileBrowser.SetTheme(BuiltInTheme.Dark);          <span class="c">// Light, Dark, Midnight, Sakura</span>
+FileBrowser.Strings = FileBrowserStrings.Korean;  <span class="c">// English, Korean, Japanese, or your own</span>
+FileBrowser.DefaultMode = BrowserMode.Native;
+FileBrowser.Font = myFont;                        <span class="c">// e.g. a CJK font for file names</span>
+FileBrowser.PanelSettings = myPanelSettings;      <span class="c">// optional</span>
+FileBrowser.IsOpen;                               <span class="c">// pause game input while true</span>
+FileBrowserBookmarks.MaxRecent = <span class="s">10</span>;</code></pre>
+
+      <h2 id="themes"><span class="l-en">Custom themes</span><span class="l-ko">커스텀 테마</span></h2>
+      <ol>
+        <li><span class="l-en">Copy <code>Runtime/Resources/OmniFileBrowser/Themes/Light.uss</code> and edit the <code>--ofb-*</code> variables.</span><span class="l-ko"><code>Runtime/Resources/OmniFileBrowser/Themes/Light.uss</code>를 복사하고 <code>--ofb-*</code> 변수를 수정합니다.</span></li>
+        <li><span class="l-en"><strong>Assets → Create → Omni File Browser → Theme</strong>, then assign the USS (and optionally a font).</span><span class="l-ko"><strong>Assets → Create → Omni File Browser → Theme</strong>으로 테마를 만들고 USS(필요하면 폰트도)를 지정합니다.</span></li>
+        <li><code>FileBrowser.Theme = myTheme;</code></li>
+      </ol>
+      <p>
+        <span class="l-en">Every visual is class based (<code>.ofb-row</code>, <code>.ofb-sidebar</code>, <code>.ofb-btn--primary</code>, …), so extra stylesheets can restyle anything, including icons.</span>
+        <span class="l-ko">모든 화면 요소가 클래스 기반(<code>.ofb-row</code>, <code>.ofb-sidebar</code>, <code>.ofb-btn--primary</code> 등)이라 스타일시트를 추가하면 아이콘을 포함해 무엇이든 바꿀 수 있습니다.</span>
+      </p>
+
+      <h2 id="platforms"><span class="l-en">Platform notes</span><span class="l-ko">플랫폼별 참고</span></h2>
+      <h3>Android</h3>
+      <ul>
+        <li><span class="l-en">The user grants a folder once via the system folder picker ("Add folder…" in the sidebar). The grant survives restarts.</span><span class="l-ko">사용자가 시스템 폴더 선택기로 폴더를 한 번 허용합니다(사이드바의 "폴더 추가…"). 허용은 앱을 다시 시작해도 유지됩니다.</span></li>
+        <li><span class="l-en">Android 11+ can't grant the root of internal storage or the Download folder itself; pick a sub-folder.</span><span class="l-ko">Android 11 이상은 내부 저장소 최상위나 Download 폴더 자체를 허용할 수 없습니다. 하위 폴더를 선택하세요.</span></li>
+        <li><span class="l-en">"App Storage" (<code>Application.persistentDataPath</code>) is always available.</span><span class="l-ko">"앱 저장소"(<code>Application.persistentDataPath</code>)는 항상 사용할 수 있습니다.</span></li>
+        <li><span class="l-en">With minify (R8/ProGuard) enabled, add <code>-keep class com.miya.omnifilebrowser.** { *; }</code> to <code>proguard-user.txt</code>.</span><span class="l-ko">minify(R8/ProGuard)를 켰다면 <code>proguard-user.txt</code>에 <code>-keep class com.miya.omnifilebrowser.** { *; }</code>를 추가하세요.</span></li>
+      </ul>
+      <h3>iOS</h3>
+      <ul>
+        <li><span class="l-en">Custom mode browses the app's Documents folder, which is made visible in the Files app by a post-build step (define <code>OFB_DISABLE_IOS_FILE_SHARING</code> to opt out).</span><span class="l-ko">커스텀 모드는 앱의 Documents 폴더를 탐색하며, 빌드 후처리로 파일 앱에 보이게 합니다(끄려면 <code>OFB_DISABLE_IOS_FILE_SHARING</code> 정의).</span></li>
+        <li><span class="l-en">Native Load copies picked files into the sandbox. Native Save needs the data up front: use <code>SaveFile</code> / <code>SaveTextFile</code>.</span><span class="l-ko">네이티브 불러오기는 파일을 샌드박스로 복사합니다. 네이티브 저장은 데이터가 미리 필요하므로 <code>SaveFile</code> / <code>SaveTextFile</code>을 사용하세요.</span></li>
+      </ul>
+      <h3>Windows / macOS / Linux</h3>
+      <ul>
+        <li><span class="l-en">Custom mode: full file system, drives and volumes in the sidebar.</span><span class="l-ko">커스텀 모드: 전체 파일 시스템, 드라이브와 볼륨이 사이드바에 표시됩니다.</span></li>
+        <li><span class="l-en">Native mode: Win32 dialogs / macOS panels via AppleScript (not in sandboxed Mac App Store builds) / Editor panels in Play Mode. Linux falls back to the custom UI.</span><span class="l-ko">네이티브 모드: Win32 대화상자 / AppleScript를 통한 macOS 패널(Mac App Store 샌드박스 빌드 제외) / 플레이 모드의 에디터 패널. Linux는 커스텀 UI로 대체됩니다.</span></li>
+      </ul>
+
+      <h2 id="extending"><span class="l-en">Extending</span><span class="l-ko">확장</span></h2>
+      <p>
+        <span class="l-en">Implement <code>IFileSystemProvider</code> (cloud storage, zip archives, …) and call <code>FileSystemProviders.Register(myProvider)</code>. Its locations appear in the sidebar and favorites, recent folders, breadcrumbs and the save flow just work.</span>
+        <span class="l-ko"><code>IFileSystemProvider</code>를 구현하고(클라우드 저장소, zip 등) <code>FileSystemProviders.Register(myProvider)</code>를 호출하세요. 위치가 사이드바에 나타나고 즐겨찾기, 최근 폴더, 경로 표시줄, 저장 흐름이 그대로 동작합니다.</span>
+      </p>
+
+      <h2 id="support"><span class="l-en">Support</span><span class="l-ko">지원</span></h2>
+      <div class="callout">
+        <span class="l-en">Questions or bug reports: <a href="mailto:leehongju1991@gmail.com">leehongju1991@gmail.com</a>. Please include your Unity version, target platform and the console log.</span>
+        <span class="l-ko">질문이나 버그 제보: <a href="mailto:leehongju1991@gmail.com">leehongju1991@gmail.com</a>. Unity 버전, 대상 플랫폼, 콘솔 로그를 함께 보내주시면 빠르게 도와드릴 수 있습니다.</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© <span id="year">2026</span> Miya</span>
+      <span><a href="../contact.html">leehongju1991@gmail.com</a></span>
+    </div>
+  </footer>
+  <script src="../assets/site.js"></script>
+</body>
+</html>
